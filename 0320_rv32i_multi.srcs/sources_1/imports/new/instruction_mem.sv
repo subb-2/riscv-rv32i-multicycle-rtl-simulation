@@ -93,34 +93,34 @@ module instruction_mem (
         //rom[15] = 32'h00842d03;
 
         //I Type
-        rom[0] = 32'hffc18213;
-        rom[1] = 32'hffe62293;
-        rom[2] = 32'h0036b313;
-        rom[3] = 32'hfff74393;
-        rom[4] = 32'haaa76413;
-        rom[5] = 32'h1236f493;
-        rom[6] = 32'h00419513;
-        rom[7] = 32'h0046d593;
-        rom[8] = 32'h4046d613;
+        //rom[0] = 32'hffc18213;
+        //rom[1] = 32'hffe62293;
+        //rom[2] = 32'h0036b313;
+        //rom[3] = 32'hfff74393;
+        //rom[4] = 32'haaa76413;
+        //rom[5] = 32'h1236f493;
+        //rom[6] = 32'h00419513;
+        //rom[7] = 32'h0046d593;
+        //rom[8] = 32'h4046d613;
 
 
         //R-type HW
-        //rom[0] = 32'h004182b3;
-        //rom[1] = 32'h402302b3;
-        //rom[2] = 32'h008193b3;
-        //rom[3] = 32'h0081a2b3;
-        //rom[4] = 32'h0081b2b3;
-        //rom[5] = 32'h00954433;
-        //rom[6] = 32'h0081d3b3;
-        //rom[7] = 32'h4042d333;
-        //rom[8] = 32'h004161b3;
-        //rom[9] = 32'h005273b3;
+        rom[0]  = 32'h004182b3;  // add  x5,  x3,  x4   (rd=x5,  rs1=x3,  rs2=x4)
+        rom[1]  = 32'h402302b3;  // sub  x5,  x6,  x2   (rd=x5,  rs1=x6,  rs2=x2)
+        rom[2]  = 32'h008193b3;  // sll  x7,  x3,  x8   (rd=x7,  rs1=x3,  rs2=x8)
+        rom[3]  = 32'h0081a2b3;  // slt  x5,  x3,  x8   (rd=x5,  rs1=x3,  rs2=x8)
+        rom[4]  = 32'h0081b2b3;  // sltu x5,  x3,  x8   (rd=x5,  rs1=x3,  rs2=x8)
+        rom[5]  = 32'h00954433;  // xor  x8,  x10, x9   (rd=x8,  rs1=x10, rs2=x9)
+        rom[6]  = 32'h0081d3b3;  // srl  x7,  x3,  x8   (rd=x7,  rs1=x3,  rs2=x8)
+        rom[7]  = 32'h4042d333;  // sra  x6,  x5,  x4   (rd=x6,  rs1=x5,  rs2=x4)
+        rom[8]  = 32'h004161b3;  // or   x3,  x3,  x4   (rd=x3,  rs1=x3,  rs2=x4)
+        rom[9]  = 32'h005273b3;  // and  x7,  x4,  x5   (rd=x7,  rs1=x4,  rs2=x5)
 //
-        //rom[10] = 32'h00d61733;
-        //rom[11] = 32'h0107a8b3;
-        //rom[12] = 32'h0117b833;
-        //rom[13] = 32'h0047d933;
-        //rom[14] = 32'h4047d9b3;
+        rom[10] = 32'h00d61733;  // sll  x14, x12, x13  (rd=x14, rs1=x12, rs2=x13)
+        rom[11] = 32'h0107a8b3;  // slt  x17, x15, x16  (rd=x17, rs1=x15, rs2=x16)
+        rom[12] = 32'h0117b833;  // sltu x16, x15, x17  (rd=x16, rs1=x15, rs2=x17)
+        rom[13] = 32'h0047d933;  // srl  x18, x15, x4   (rd=x18, rs1=x15, rs2=x4)
+        rom[14] = 32'h4047d9b3;  // sra  x19, x15, x4   (rd=x19, rs1=x15, rs2=x4)
 
 
         //rom[0] = 32'h004182b3; //ADD X5, X3, X4  

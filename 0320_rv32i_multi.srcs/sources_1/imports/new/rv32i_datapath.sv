@@ -20,7 +20,7 @@ module rv32i_datapath (
 );
 
     logic [31:0]
-        rd1, rd2, imm_data, alurs2_data, rfwb_data, pc_alu_imm, pc_alu_4;
+        rd1, rd2, imm_data, alu_result, alurs2_data, rfwb_data, pc_alu_imm, pc_alu_4;
 
     logic b_taken;
 

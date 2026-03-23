@@ -24,7 +24,7 @@ module RV32I_cpu (
         .funct7     (instr_data[31:25]),
         .funct3     (instr_data[14:12]),
         .opcode     (instr_data[6:0]),
-        .pc_en      (pc_en),
+        .pc_en      (pc_en), //for multi cycle Fetch : pc
         .rf_we      (rf_we),
         .alu_src    (alu_src),
         .alu_control(alu_control),
@@ -60,7 +60,7 @@ module control_unit (
     output logic       jalr,
     output logic       dwe
 );
-
+    //control unit multi cycle stage 
     typedef enum logic [2:0] {
         FETCH,
         DECODE,
@@ -95,10 +95,7 @@ module control_unit (
             end
             EXECUTE: begin
                 case (opcode)
-                    `R_TYPE, `I_TYPE, `LUI_TYPE, `AUIPC_TYPE, `J_TYPE, `JL_TYPE: begin
-                        n_state = WB;
-                    end 
-                    `B_TYPE: begin
+                    `R_TYPE, `I_TYPE, `B_TYPE, `LUI_TYPE, `AUIPC_TYPE, `J_TYPE, `JL_TYPE: begin
                         n_state = FETCH;
                     end
                     `S_TYPE, `IL_TYPE: begin
@@ -108,11 +105,11 @@ module control_unit (
             end
             MEM: begin
                 case (opcode)
-                    `IL_TYPE: begin
-                        n_state = WB;
-                    end
                     `S_TYPE: begin
                         n_state = FETCH;
+                    end
+                    `IL_TYPE: begin
+                        n_state = WB;
                     end
                 endcase
             end
@@ -126,14 +123,14 @@ module control_unit (
     always_comb begin
         pc_en       = 1'b0;
         rf_we       = 1'b0;
-        alu_src     = 1'b0;
-        branch      = 1'b0;
         jal         = 1'b0;
         jalr        = 1'b0;
+        branch      = 1'b0;
+        alu_src     = 1'b0;
         alu_control = 4'b0000;
         rfwd_src    = 3'd0;
-        o_funct3    = 3'b000;
-        dwe         = 1'b0;
+        o_funct3    = 3'b000; //for S type, IL type
+        dwe         = 1'b0; //for S type, IL type 
         case (c_state)
             FETCH: begin
                 pc_en = 1'b1;
@@ -144,10 +141,12 @@ module control_unit (
             EXECUTE: begin
                 case (opcode)
                     `R_TYPE: begin
+                        rf_we    = 1'b1; //next state FETCH 
                         alu_src     = 1'b0;
                         alu_control = {funct7[5], funct3};
                     end
                     `I_TYPE: begin
+                        rf_we    = 1'b1;
                         alu_src = 1'b1;
                         if (funct3 == 3'b101) begin
                             alu_control = {funct7[5], funct3};  //SRL, SRA
@@ -156,62 +155,18 @@ module control_unit (
                         end
                     end
                     `B_TYPE: begin
+                        branch      = 1'b1;
                         alu_src     = 1'b0;
                         alu_control = {1'b0, funct3};
-                        branch      = 1'b1;
                     end
                     `S_TYPE: begin
-                        alu_control = 4'b0000;
+                        alu_src     = 1'b1;
+                        alu_control = 4'b0000; // add for dwaddr 
                     end
                     `IL_TYPE: begin
                         alu_src     = 1'b1;
-                        alu_control = 4'b0000;
-                    end
-                    `LUI_TYPE: begin
-
-                    end
-                    `AUIPC_TYPE: begin
-
-                    end
-                    `J_TYPE, `JL_TYPE: begin
-                        jal = 1'b1;
-                        if (opcode == `JL_TYPE) jalr = 1'b1;
-                        else jalr = 1'b0;
-                    end
-                endcase
-            end
-            MEM: begin
-                case (opcode)
-                    `S_TYPE: begin
-                        o_funct3 = funct3;
-                        dwe      = 1'b1;
-                    end
-                    `IL_TYPE: begin
-                        o_funct3 = funct3;
-                        dwe      = 1'b0;
-                    end
-                endcase
-            end
-            WB: begin
-                case (opcode)
-                    `R_TYPE: begin  // R-type, to write register file,
-                        rf_we    = 1'b1;
-                        rfwd_src = 3'd0;
-                    end
-                    `B_TYPE: begin  // R-type, to write register file,
-                        rf_we    = 1'b0;
-                        rfwd_src = 3'd0;
-                    end
-                    `S_TYPE: begin
-                        rf_we = 1'b0;
-                    end
-                    `IL_TYPE: begin
-                        rf_we    = 1'b1;
+                        alu_control = 4'b0000; //add for dwaddr
                         rfwd_src = 3'd1;
-                    end
-                    `I_TYPE: begin
-                        rf_we = 1'b1;
-                        rfwd_src = 3'd0;
                     end
                     `LUI_TYPE: begin
                         rf_we    = 1'b1;
@@ -223,9 +178,23 @@ module control_unit (
                     end
                     `J_TYPE, `JL_TYPE: begin
                         rf_we    = 1'b1;
+                        jal = 1'b1;
                         rfwd_src = 3'd4;
+                        if (opcode == `JL_TYPE) jalr = 1'b1;
+                        else jalr = 1'b0;
                     end
                 endcase
+            end
+            MEM: begin
+                o_funct3 = funct3;
+                if (opcode == `S_TYPE) begin
+                    dwe      = 1'b1;
+                end
+            end
+            WB: begin
+                //IL type 
+                rf_we = 1'b1;
+                rfwd_src = 3'b001;
             end
         endcase
     end

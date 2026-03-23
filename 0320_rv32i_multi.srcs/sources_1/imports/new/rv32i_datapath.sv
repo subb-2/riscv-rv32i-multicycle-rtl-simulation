@@ -20,7 +20,11 @@ module rv32i_datapath (
 );
 
     logic [31:0]
-        rd1, rd2, imm_data, alu_result, alurs2_data, rfwb_data, pc_alu_imm, pc_alu_4;
+        alu_result,
+        alurs2_data,
+        rfwb_data,
+        pc_alu_imm,
+        pc_alu_4;
 
     logic b_taken;
 
@@ -33,14 +37,14 @@ module rv32i_datapath (
     logic [31:0] o_mem_drdata;
 
     assign daddr  = o_exe_alu_result;
-    assign dwdata = o_exe_rs2; 
+    assign dwdata = o_exe_rs2;
 
     //fetch, execute 
     program_counter U_PC (
         .clk            (clk),
         .rst            (rst),
         .pc_en          (pc_en),
-        .rd1            (i_dec_rs1),
+        .rd1            (o_dec_rs1),
         .imm_data       (o_dec_imm),
         .b_taken        (b_taken),     //from alu comparator
         .branch         (branch),      //froma control unit for B-type
@@ -69,8 +73,7 @@ module rv32i_datapath (
         .imm_data  (i_dec_imm)
     );
 
-
-    //execute
+    //decode output register 
     state_register U_DEC_REG_RS1 (
         .clk(clk),
         .rst(rst),
@@ -93,6 +96,7 @@ module rv32i_datapath (
     );
 
 
+    //execute
     mux_2x1 U_MUX_ALUSRC_RS2 (
         .in0    (o_dec_rs2),   //sel 0
         .in1    (o_dec_imm),   //sel 1
@@ -108,7 +112,7 @@ module rv32i_datapath (
         .b_taken    (b_taken)
     );
 
-
+    //execute registe for ALU result, RS2 
     state_register U_EXE_ALU_RESULT (
         .clk(clk),
         .rst(rst),
@@ -127,15 +131,15 @@ module rv32i_datapath (
     state_register U_MEM_REG_DRDATA (
         .clk(clk),
         .rst(rst),
-        .in (drdata),
-        .out(o_mem_drdata)
+        .in (drdata), //from alu result
+        .out(o_mem_drdata) //to data MEM_wdata 
     );
-    //Write Back to Register File
 
+    //Write Back to Register File
 
     //to register file
     mux_5x1 U_WB_MUX (
-        .in0    (o_exe_alu_result),  // from EXE_ALU Result
+        .in0    (alu_result),  // from ALU Result , because of process with execute state 
         .in1    (o_mem_drdata),      //from data memory
         .in2    (o_dec_imm),         //from imm extend, for LUI
         .in3    (pc_alu_imm),        //from pc + imm extend, for AUIPC
@@ -251,13 +255,13 @@ module register_file (
     logic [31:0] register_file[1:31];  // x0 must have zero value 
 
     //simulation 할 때만 들어감 
-`ifdef SIMULATION
-    initial begin
-        for (int i = 1; i < 32; i++) begin
-            register_file[i] = i;
-        end
-    end
-`endif
+//`ifdef SIMULATION
+//    initial begin
+//        for (int i = 1; i < 32; i++) begin
+//            register_file[i] = i;
+//        end
+//    end
+//`endif
 
     //0번지 hard wire -> 0번지 assess되면 항상 0 나가도록 메모리 뭐 하라고?
     //assign if 
@@ -338,7 +342,7 @@ endmodule
 module program_counter (
     input         clk,
     input         rst,
-    input         pc_en,
+    input         pc_en,            //from control unit for PC register 
     input  [31:0] rd1,             //rs1
     input  [31:0] imm_data,
     input         b_taken,
@@ -433,10 +437,10 @@ module register (
 endmodule
 
 module register_en (
-    input clk,
-    input rst,
-    input en,
-    input [31:0] data_in,
+    input         clk,
+    input         rst,
+    input         en,
+    input  [31:0] data_in,
     output [31:0] data_out
 );
 

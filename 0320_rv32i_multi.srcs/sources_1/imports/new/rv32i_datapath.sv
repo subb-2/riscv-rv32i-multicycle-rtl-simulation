@@ -10,13 +10,13 @@ module rv32i_datapath (
     input  [ 2:0] rfwd_src,
     input  [ 3:0] alu_control,
     input  [31:0] instr_data,
-    input  [31:0] drdata,
+    input  [31:0] bus_rdata,
     input         branch,
     input         jal,
     input         jalr,
     output [31:0] instr_addr,
-    output [31:0] daddr,
-    output [31:0] dwdata
+    output [31:0] bus_addr,
+    output [31:0] bus_wdata
 );
 
     logic [31:0]
@@ -36,8 +36,8 @@ module rv32i_datapath (
 
     logic [31:0] o_mem_drdata;
 
-    assign daddr  = o_exe_alu_result;
-    assign dwdata = o_exe_rs2;
+    assign bus_addr  = o_exe_alu_result;
+    assign bus_wdata = o_exe_rs2;
 
     //fetch, execute 
     program_counter U_PC (
@@ -131,7 +131,7 @@ module rv32i_datapath (
     state_register U_MEM_REG_DRDATA (
         .clk(clk),
         .rst(rst),
-        .in (drdata), //from alu result
+        .in (bus_rdata), //from alu result
         .out(o_mem_drdata) //to data MEM_wdata 
     );
 

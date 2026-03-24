@@ -5,12 +5,14 @@ module RV32I_cpu (
     input         clk,
     input         rst,
     input  [31:0] instr_data,
-    input  [31:0] drdata,
+    input  [31:0] bus_rdata,
+    input         bus_ready,
     output [31:0] instr_addr,
-    output        dwe,
+    output        bus_wreq,
+    output        bus_rreq,
     output [ 2:0] o_funct3,
-    output [31:0] daddr,
-    output [31:0] dwdata 
+    output [31:0] bus_addr,
+    output [31:0] bus_wdata
 );
 
     logic pc_en, rf_we, alu_src, branch, jal, jalr;
@@ -24,7 +26,8 @@ module RV32I_cpu (
         .funct7     (instr_data[31:25]),
         .funct3     (instr_data[14:12]),
         .opcode     (instr_data[6:0]),
-        .pc_en      (pc_en), //for multi cycle Fetch : pc
+        .ready      (bus_ready),
+        .pc_en      (pc_en),              //for multi cycle Fetch : pc
         .rf_we      (rf_we),
         .alu_src    (alu_src),
         .alu_control(alu_control),
@@ -33,10 +36,13 @@ module RV32I_cpu (
         .branch     (branch),
         .jal        (jal),
         .jalr       (jalr),
-        .dwe        (dwe)
+        .dwe        (bus_wreq),
+        .dre        (bus_rreq)
     );
 
-    rv32i_datapath U_DATAPATH (.*);
+    rv32i_datapath U_DATAPATH (
+        .*
+    );
 
 
 endmodule
@@ -49,6 +55,7 @@ module control_unit (
     input        [6:0] funct7,
     input        [2:0] funct3,
     input        [6:0] opcode,
+    input              ready,
     output logic       pc_en,
     output logic       rf_we,
     output logic       alu_src,
@@ -58,7 +65,8 @@ module control_unit (
     output logic       branch,
     output logic       jal,
     output logic       jalr,
-    output logic       dwe
+    output logic       dwe,
+    output logic       dre
 );
     //control unit multi cycle stage 
     typedef enum logic [2:0] {
@@ -106,7 +114,9 @@ module control_unit (
             MEM: begin
                 case (opcode)
                     `S_TYPE: begin
-                        n_state = FETCH;
+                        if (ready) begin
+                            n_state = FETCH;
+                        end
                     end
                     `IL_TYPE: begin
                         n_state = WB;
@@ -114,7 +124,9 @@ module control_unit (
                 endcase
             end
             WB: begin
-                n_state = FETCH;
+                if (ready) begin
+                    n_state = FETCH;
+                end
             end
         endcase
     end
@@ -129,8 +141,9 @@ module control_unit (
         alu_src     = 1'b0;
         alu_control = 4'b0000;
         rfwd_src    = 3'd0;
-        o_funct3    = 3'b000; //for S type, IL type
-        dwe         = 1'b0; //for S type, IL type 
+        o_funct3    = 3'b000;  //for S type, IL type
+        dwe         = 1'b0;  //for S type 
+        dre         = 1'b0;  // for IL type
         case (c_state)
             FETCH: begin
                 pc_en = 1'b1;
@@ -141,12 +154,12 @@ module control_unit (
             EXECUTE: begin
                 case (opcode)
                     `R_TYPE: begin
-                        rf_we    = 1'b1; //next state FETCH 
+                        rf_we       = 1'b1;  //next state FETCH 
                         alu_src     = 1'b0;
                         alu_control = {funct7[5], funct3};
                     end
                     `I_TYPE: begin
-                        rf_we    = 1'b1;
+                        rf_we   = 1'b1;
                         alu_src = 1'b1;
                         if (funct3 == 3'b101) begin
                             alu_control = {funct7[5], funct3};  //SRL, SRA
@@ -161,12 +174,12 @@ module control_unit (
                     end
                     `S_TYPE: begin
                         alu_src     = 1'b1;
-                        alu_control = 4'b0000; // add for dwaddr 
+                        alu_control = 4'b0000;  // add for dwaddr 
                     end
                     `IL_TYPE: begin
                         alu_src     = 1'b1;
-                        alu_control = 4'b0000; //add for dwaddr
-                        rfwd_src = 3'd1;
+                        alu_control = 4'b0000;  //add for dwaddr
+                        rfwd_src    = 3'd1;
                     end
                     `LUI_TYPE: begin
                         rf_we    = 1'b1;
@@ -178,7 +191,7 @@ module control_unit (
                     end
                     `J_TYPE, `JL_TYPE: begin
                         rf_we    = 1'b1;
-                        jal = 1'b1;
+                        jal      = 1'b1;
                         rfwd_src = 3'd4;
                         if (opcode == `JL_TYPE) jalr = 1'b1;
                         else jalr = 1'b0;
@@ -188,13 +201,14 @@ module control_unit (
             MEM: begin
                 o_funct3 = funct3;
                 if (opcode == `S_TYPE) begin
-                    dwe      = 1'b1;
+                    dwe = 1'b1;
                 end
             end
             WB: begin
                 //IL type 
-                rf_we = 1'b1;
+                rf_we    = 1'b1;
                 rfwd_src = 3'b001;
+                dre      = 1'b1;
             end
         endcase
     end

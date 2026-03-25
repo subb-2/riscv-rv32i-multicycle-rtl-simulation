@@ -119,14 +119,18 @@ module control_unit (
                         end
                     end
                     `IL_TYPE: begin
-                        n_state = WB;
+                        if (ready) begin
+                            n_state = WB;
+                        end
+                        //n_state = WB;
                     end
                 endcase
             end
             WB: begin
-                if (ready) begin
-                    n_state = FETCH;
-                end
+                n_state = FETCH;
+                //if (ready) begin
+                //    n_state = FETCH;
+                //end
             end
         endcase
     end

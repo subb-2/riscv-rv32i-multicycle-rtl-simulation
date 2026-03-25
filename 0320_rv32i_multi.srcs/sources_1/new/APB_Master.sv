@@ -78,7 +78,7 @@ module APB_Master (
                 //mux 사용?
                 decode_en   = 0;
                 PENABLE = 1'b0;
-                PADDR_next = 32'd0;
+                PADDR_next = 32'd0; 
                 PWDATA_next = 32'd0;
                 PWRITE_next = 1'b0; //이걸 왜 추가해?
                 if (WREQ | RREQ) begin

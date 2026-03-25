@@ -4,9 +4,9 @@ module tb_rv32i_multi();
 
     logic clk, rst;
 
-    RV32I_top dut (
+    rv32I_mcu dut (
         .clk(clk),
-        .rst(rst)
+        .rst(rst) 
     );
 
     always #5 clk = ~clk;

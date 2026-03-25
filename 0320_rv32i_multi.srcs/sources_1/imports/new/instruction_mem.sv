@@ -10,7 +10,8 @@ module instruction_mem (
     //logic [31:0] rom [0:32];
 
     initial begin
-        $readmemh("riscv_ru32i_rom_data.mem",rom); 
+        //$readmemh("riscv_ru32i_rom_data.mem",rom); 
+        $readmemh("U_APB_BRAM.mem",rom); 
 
         //hex 값이니까 readmemh로 읽어야 함
         //저장할 위치도 알려줘야 함 : rom 

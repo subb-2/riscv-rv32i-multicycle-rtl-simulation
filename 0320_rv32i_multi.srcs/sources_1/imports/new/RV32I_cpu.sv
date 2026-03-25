@@ -200,6 +200,9 @@ module control_unit (
             end
             MEM: begin
                 o_funct3 = funct3;
+                if(opcode == `IL_TYPE) begin 
+                    dre = 1'b1;
+                end 
                 if (opcode == `S_TYPE) begin
                     dwe = 1'b1;
                 end
@@ -208,7 +211,7 @@ module control_unit (
                 //IL type 
                 rf_we    = 1'b1;
                 rfwd_src = 3'b001;
-                dre      = 1'b1;
+                //dre      = 1'b1;
             end
         endcase
     end

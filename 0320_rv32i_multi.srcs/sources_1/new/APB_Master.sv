@@ -3,7 +3,7 @@
 module APB_Master (
     //BUS Global signal
     input PCLK,
-    input PRESETn,
+    input PRESET,
 
     //SoC Internal signal with CPU
     input  [31:0] Addr,   // from cpu
@@ -50,8 +50,8 @@ module APB_Master (
     logic [31:0] PADDR_next, PWDATA_next;
     logic decode_en, PWRITE_next;  //신호선 추가 
 
-    always_ff @(posedge PCLK, negedge PRESETn) begin
-        if (!PRESETn) begin  //negative edge reset 
+    always_ff @(posedge PCLK, posedge PRESET) begin
+        if (PRESET) begin  //negative edge reset 
             c_state <= IDLE;
             PADDR   <= 32'd0;
             PWDATA  <= 32'd0;
@@ -69,7 +69,6 @@ module APB_Master (
         n_state     = c_state;
         decode_en   = 1'b0;
         PENABLE     = 1'b0;
-        PWRITE      = 1'b0;
         PADDR_next  = PADDR;
         PWDATA_next = PWDATA;
         PWRITE_next = PWRITE;
@@ -77,21 +76,25 @@ module APB_Master (
             IDLE: begin
                 //여기서 psel 을 0으로 하면 멀티플드라이버 에러 남
                 //mux 사용?
-                decode_en = 0;
+                decode_en   = 0;
+                PENABLE = 1'b0;
+                PADDR_next = 32'd0;
+                PWDATA_next = 32'd0;
+                PWRITE_next = 1'b0; //이걸 왜 추가해?
                 if (WREQ | RREQ) begin
                     // 한 번만 업데이트 해 놓으면 유지하고 있을 것임
                     // registe할거니까 미리 next에 넣어두어야 함
                     // 지금 next에 넣어놓는 것이니까 idle에서 넣어야지
                     // 다음 사이클에 setup에서 제대로 나오게 됨 
                     // 이 뒤에 넣으면 next에 넣는 것이라서 한 클럭 밀리게 됨 
-                    PADDR_next  = Addr;
+                    PADDR_next = Addr;  //이 값이 유지를 못하고 있음 
                     PWDATA_next = Wdata;
                     //여기에 두면 신호를 유지한다고? 
                     //IDLE일 때는 x니까 상관 없음 
                     if (WREQ) begin
-                        PWRITE = 1'b1;
+                        PWRITE_next = 1'b1;
                     end else begin
-                        PWRITE = 1'b0;
+                        PWRITE_next = 1'b0;
                     end
                     n_state = SETUP;
                 end
@@ -114,7 +117,7 @@ module APB_Master (
 
     addr_decoder U_ADDR_DECODER (
         .en(decode_en),
-        .addr(addr),
+        .addr(PADDR),
         .psel0(PSEL0),
         .psel1(PSEL1),
         .psel2(PSEL2),
@@ -124,7 +127,7 @@ module APB_Master (
     );
 
     apb_mux U_APB_MUX (
-        .sel(addr),
+        .sel(PADDR),
         .PRDATA0(PRDATA0),
         .PRDATA1(PRDATA1),
         .PRDATA2(PRDATA2),

@@ -1,8 +1,10 @@
 `timescale 1ns / 1ps
 
 module rv32I_mcu (
-    input clk,
-    input rst
+    input         clk,
+    input         rst,
+    input  [15:0] sw, 
+    output [15:0] led
 );
     logic bus_wreq, bus_rreq, bus_ready;
     logic [2:0] o_funct3;
@@ -17,7 +19,7 @@ module rv32I_mcu (
 
     RV32I_cpu U_RV32I (
         .*,
-        .o_funct3 (o_funct3) 
+        .o_funct3(o_funct3)
     );
 
     APB_Master U_APB_MASTER (
@@ -62,6 +64,33 @@ module rv32I_mcu (
         .PREADY(PREADY0),
         .i_funct3(o_funct3)
     );
+
+    GPO_Slave U_APB_GPO (
+        .PCLK(clk),
+        .PRESET(rst),
+        .PADDR(PADDR),
+        .PWDATA(PWDATA),
+        .PENABLE(PENABLE),
+        .PWRITE(PWRITE),
+        .PSEL(PSEL1),
+        .PRDATA(PRDATA1),
+        .PREADY(PREADY1),
+        .GPO_OUT(led)
+    );
+
+    GPI_Slave U_APB_GPI (
+        .PCLK  (clk),
+        .PRESET(rst),
+        .PADDR (PADDR),
+        .PWDATA(PWDATA),
+        .PWRITE(PWRITE),
+        .PENABLE(PENABLE),
+        .PSEL(PSEL2),
+        .PRDATA(PRDATA2),
+        .PREADY(PREADY2),
+        .GPI_IN(sw)
+    ); 
+
 
     //data_mem U_DATA_MEM (
     //    .*,

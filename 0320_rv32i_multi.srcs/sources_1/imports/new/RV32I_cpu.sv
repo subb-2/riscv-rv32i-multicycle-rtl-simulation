@@ -68,6 +68,64 @@ module control_unit (
     output logic       dwe,
     output logic       dre
 );
+
+// ============================================================
+// [DEBUG] Opcode 디버깅용 enum
+// ============================================================
+typedef enum logic [6:0] {
+    DBG_R_TYPE   = `R_TYPE,
+    DBG_I_TYPE   = `I_TYPE,
+    DBG_S_TYPE   = `S_TYPE,
+    DBG_B_TYPE   = `B_TYPE,
+    DBG_IL_TYPE  = `IL_TYPE,
+    DBG_LUI_TYPE = `LUI_TYPE,
+    DBG_AUIPC_TYPE = `AUIPC_TYPE,
+    DBG_J_TYPE   = `J_TYPE,
+    DBG_JL_TYPE  = `JL_TYPE
+} opcode_dbg_e;
+
+// waveform에 띄울 신호
+opcode_dbg_e dbg_opcode;
+
+// casting
+assign dbg_opcode = opcode_dbg_e'(opcode);
+
+// ============================================================
+// [DEBUG] ALU Control 디버깅용 enum (R/I 타입)
+// ============================================================
+typedef enum logic [3:0] {
+    DBG_ADD  = 4'b0000,
+    DBG_SUB  = 4'b1000,
+    DBG_SLL  = 4'b0001,
+    DBG_SLT  = 4'b0010,
+    DBG_SLTU = 4'b0011,
+    DBG_XOR  = 4'b0100,
+    DBG_SRL  = 4'b0101,
+    DBG_SRA  = 4'b1101,
+    DBG_OR   = 4'b0110,
+    DBG_AND  = 4'b0111
+} alu_ctrl_dbg_e;
+
+// B-type 전용 (겹침 방지)
+typedef enum logic [3:0] {
+    DBG_BEQ  = 4'b0000,
+    DBG_BNE  = 4'b0001,
+    DBG_BLT  = 4'b0100,
+    DBG_BGE  = 4'b0101,
+    DBG_BLTU = 4'b0110,
+    DBG_BGEU = 4'b0111
+} alu_ctrl_dbg_btype_e;
+
+// waveform용 신호
+alu_ctrl_dbg_e       dbg_alu_ctrl;
+alu_ctrl_dbg_btype_e dbg_alu_ctrl_btype;
+
+// casting
+assign dbg_alu_ctrl       = alu_ctrl_dbg_e'(alu_control);
+assign dbg_alu_ctrl_btype = alu_ctrl_dbg_btype_e'(alu_control);
+
+
+
     //control unit multi cycle stage 
     typedef enum logic [2:0] {
         FETCH,
@@ -206,8 +264,7 @@ module control_unit (
                 o_funct3 = funct3;
                 if(opcode == `IL_TYPE) begin 
                     dre = 1'b1;
-                end 
-                if (opcode == `S_TYPE) begin
+                end else if (opcode == `S_TYPE) begin
                     dwe = 1'b1;
                 end
             end

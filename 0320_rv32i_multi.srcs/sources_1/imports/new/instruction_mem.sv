@@ -11,8 +11,10 @@ module instruction_mem (
 
     initial begin
         //$readmemh("riscv_ru32i_rom_data.mem",rom); 
-        $readmemh("U_APB_BRAM.mem",rom); 
-
+        //$readmemh("U_APB_BRAM.mem",rom); 
+        //$readmemh("APB_GPO.mem",rom); 
+        $readmemh("APB_BRAM_GPO_GPI.mem",rom); 
+ 
         //hex 값이니까 readmemh로 읽어야 함
         //저장할 위치도 알려줘야 함 : rom 
 

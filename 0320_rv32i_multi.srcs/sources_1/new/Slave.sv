@@ -110,6 +110,7 @@ module BRAM (
         end
     end
 
+// assign PRDATA = bmem[PADDR[11:2]];
 
     //logic dwe;
     //assign dwe = PSEL && PENABLE && PWRITE;

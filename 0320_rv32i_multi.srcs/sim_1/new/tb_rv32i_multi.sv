@@ -3,35 +3,40 @@
 module tb_rv32i_multi();
 
     logic clk, rst;
-    logic [15:0] sw, led;
+    logic [7:0] GPO, GPI;
+    wire [15:0] GPIO;
 
     rv32I_mcu dut (
         .clk(clk),
         .rst(rst),
-        .sw(sw),
-        .led(led)
+        .GPI(GPI),
+        .GPO(GPO),
+        .GPIO(GPIO)
     );
+
 
     always #5 clk = ~clk;
 
     initial begin
         clk = 0;
         rst = 1;
-        sw = 0;
+        GPI = 8'h00;
+        //GPO = 16'h0000;
+        //GPIO = 16'h0000;
         @(negedge clk);
         @(negedge clk);
         rst = 0;
-        @(negedge clk);
-        sw = 16'hf0f0;
-        repeat(100) @(negedge clk); 
+        GPI = 8'haa; 
+        repeat(4000) @(negedge clk); 
         
         //sw = 16'h00ff;
         //repeat(100) @(negedge clk);
 
         //sw = 16'h1234;
         //repeat(200) @(negedge clk);
-        repeat(400) @(negedge clk);
+        //repeat(400) @(negedge clk);
         $stop;
     end
 
 endmodule
+ 

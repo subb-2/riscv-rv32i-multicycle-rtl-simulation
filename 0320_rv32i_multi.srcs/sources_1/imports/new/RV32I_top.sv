@@ -3,8 +3,11 @@
 module rv32I_mcu (
     input         clk,
     input         rst,
-    input  [15:0] sw, 
-    output [15:0] led
+    input  [15:0] GPI,
+    output [ 3:0] fnd_digit,
+    output [ 7:0] fnd_data,
+    output [15:0] GPO,
+    inout  [15:0] GPIO
 );
     logic bus_wreq, bus_rreq, bus_ready;
     logic [2:0] o_funct3;
@@ -20,7 +23,7 @@ module rv32I_mcu (
     RV32I_cpu U_RV32I (
         .*,
         .o_funct3(o_funct3)
-    );
+    ); 
 
     APB_Master U_APB_MASTER (
         .PCLK(clk),  // 반클럭 차이 나겠지만 괜찮음 
@@ -75,21 +78,48 @@ module rv32I_mcu (
         .PSEL(PSEL1),
         .PRDATA(PRDATA1),
         .PREADY(PREADY1),
-        .GPO_OUT(led)
+        .GPO_OUT(GPO)
     );
 
     GPI_Slave U_APB_GPI (
-        .PCLK  (clk),
+        .PCLK(clk),
         .PRESET(rst),
-        .PADDR (PADDR),
+        .PADDR(PADDR),
         .PWDATA(PWDATA),
         .PWRITE(PWRITE),
         .PENABLE(PENABLE),
         .PSEL(PSEL2),
+        .GPI_IN(GPI),
         .PRDATA(PRDATA2),
-        .PREADY(PREADY2),
-        .GPI_IN(sw)
-    ); 
+        .PREADY(PREADY2)
+    );
+
+    APB_GPIO U_APB_GPIO (
+        .PCLK(clk),
+        .PRESET(rst),
+        .PADDR(PADDR),
+        .PWDATA(PWDATA),
+        .PENABLE(PENABLE),
+        .PWRITE(PWRITE),
+        .PSEL(PSEL3),
+        .PRDATA(PRDATA3),
+        .PREADY(PREADY3),
+        .GPIO(GPIO)
+    );
+
+ APB_FND U_APB_FND (
+    .PCLK(clk),
+    .PRESET(rst),
+    .PADDR(PADDR),
+    .PWDATA(PWDATA),
+    .PENABLE(PENABLE),
+    .PWRITE(PWRITE),
+    .PSEL(PSEL4),
+    .PRDATA(PRDATA4),
+    .PREADY(PREADY4),
+    .fnd_digit(fnd_digit),
+    .fnd_data(fnd_data)
+);
 
 
     //data_mem U_DATA_MEM (

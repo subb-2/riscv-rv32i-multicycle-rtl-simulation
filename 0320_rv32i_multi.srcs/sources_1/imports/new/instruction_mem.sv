@@ -6,14 +6,16 @@ module instruction_mem (
     output [31:0] instr_data
 );
 
-    logic [31:0] rom [0:127];
-    //logic [31:0] rom [0:32];
+    logic [31:0] rom [0:255];
+    //logic [31:0] rom [0:32]; 
 
     initial begin
         //$readmemh("riscv_ru32i_rom_data.mem",rom); 
         //$readmemh("U_APB_BRAM.mem",rom); 
         //$readmemh("APB_GPO.mem",rom); 
-        $readmemh("APB_BRAM_GPO_GPI.mem",rom); 
+        //$readmemh("APB_BRAM_GPO_GPI.mem",rom); 
+        //$readmemh("APB_GPIO_LED_BLINK.mem",rom); 
+        $readmemh("APB_FND.mem",rom); 
  
         //hex 값이니까 readmemh로 읽어야 함
         //저장할 위치도 알려줘야 함 : rom 

@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="277600001fs"></ZoomEndTime>
-      <Cursor1Time time="305235000fs"></Cursor1Time>
+      <ZoomStartTime time="23863485000fs"></ZoomStartTime>
+      <ZoomEndTime time="45421365001fs"></ZoomEndTime>
+      <Cursor1Time time="41828385000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="222"></NameColumnWidth>
+      <NameColumnWidth column_width="210"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="11" />
+   <WVObjectSize size="16" />
    <wave_markers>
       <marker time="295000" label="" />
       <marker time="445000" label="" />
@@ -44,8 +44,424 @@
       <obj_property name="ObjectShortName">instr_data[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_rv32i_multi/dut/U_INSTRUCTION_MEM/rom" type="array">
-      <obj_property name="ElementShortName">rom[0:255][31:0]</obj_property>
-      <obj_property name="ObjectShortName">rom[0:255][31:0]</obj_property>
+      <obj_property name="ElementShortName">rom[0:1023][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rom[0:1023][31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group1298" type="group">
+      <obj_property name="label">uart_rx</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/rx" type="logic">
+         <obj_property name="ElementShortName">rx</obj_property>
+         <obj_property name="ObjectShortName">rx</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/b_tick" type="logic">
+         <obj_property name="ElementShortName">b_tick</obj_property>
+         <obj_property name="ObjectShortName">b_tick</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/rx_data" type="array">
+         <obj_property name="ElementShortName">rx_data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">rx_data[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/rx_done" type="logic">
+         <obj_property name="ElementShortName">rx_done</obj_property>
+         <obj_property name="ObjectShortName">rx_done</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/c_state" type="array">
+         <obj_property name="ElementShortName">c_state[1:0]</obj_property>
+         <obj_property name="ObjectShortName">c_state[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/n_state" type="array">
+         <obj_property name="ElementShortName">n_state[1:0]</obj_property>
+         <obj_property name="ObjectShortName">n_state[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/b_tick_cnt_reg" type="array">
+         <obj_property name="ElementShortName">b_tick_cnt_reg[4:0]</obj_property>
+         <obj_property name="ObjectShortName">b_tick_cnt_reg[4:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/b_tick_cnt_next" type="array">
+         <obj_property name="ElementShortName">b_tick_cnt_next[4:0]</obj_property>
+         <obj_property name="ObjectShortName">b_tick_cnt_next[4:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/bit_cnt_next" type="array">
+         <obj_property name="ElementShortName">bit_cnt_next[2:0]</obj_property>
+         <obj_property name="ObjectShortName">bit_cnt_next[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/bit_cnt_reg" type="array">
+         <obj_property name="ElementShortName">bit_cnt_reg[2:0]</obj_property>
+         <obj_property name="ObjectShortName">bit_cnt_reg[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/done_reg" type="logic">
+         <obj_property name="ElementShortName">done_reg</obj_property>
+         <obj_property name="ObjectShortName">done_reg</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/done_next" type="logic">
+         <obj_property name="ElementShortName">done_next</obj_property>
+         <obj_property name="ObjectShortName">done_next</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/buf_reg" type="array">
+         <obj_property name="ElementShortName">buf_reg[7:0]</obj_property>
+         <obj_property name="ObjectShortName">buf_reg[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_RX/buf_next" type="array">
+         <obj_property name="ElementShortName">buf_next[7:0]</obj_property>
+         <obj_property name="ObjectShortName">buf_next[7:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group1277" type="group">
+      <obj_property name="label">uart_tx</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/tx_start" type="logic">
+         <obj_property name="ElementShortName">tx_start</obj_property>
+         <obj_property name="ObjectShortName">tx_start</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/b_tick" type="logic">
+         <obj_property name="ElementShortName">b_tick</obj_property>
+         <obj_property name="ObjectShortName">b_tick</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/tx_data" type="array">
+         <obj_property name="ElementShortName">tx_data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_data[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/tx_busy" type="logic">
+         <obj_property name="ElementShortName">tx_busy</obj_property>
+         <obj_property name="ObjectShortName">tx_busy</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/tx_done" type="logic">
+         <obj_property name="ElementShortName">tx_done</obj_property>
+         <obj_property name="ObjectShortName">tx_done</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/uart_tx" type="logic">
+         <obj_property name="ElementShortName">uart_tx</obj_property>
+         <obj_property name="ObjectShortName">uart_tx</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/c_state" type="array">
+         <obj_property name="ElementShortName">c_state[1:0]</obj_property>
+         <obj_property name="ObjectShortName">c_state[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/n_state" type="array">
+         <obj_property name="ElementShortName">n_state[1:0]</obj_property>
+         <obj_property name="ObjectShortName">n_state[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/tx_reg" type="logic">
+         <obj_property name="ElementShortName">tx_reg</obj_property>
+         <obj_property name="ObjectShortName">tx_reg</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/tx_next" type="logic">
+         <obj_property name="ElementShortName">tx_next</obj_property>
+         <obj_property name="ObjectShortName">tx_next</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/bit_cnt_reg" type="array">
+         <obj_property name="ElementShortName">bit_cnt_reg[2:0]</obj_property>
+         <obj_property name="ObjectShortName">bit_cnt_reg[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/bit_cnt_next" type="array">
+         <obj_property name="ElementShortName">bit_cnt_next[2:0]</obj_property>
+         <obj_property name="ObjectShortName">bit_cnt_next[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/b_tick_cnt_reg" type="array">
+         <obj_property name="ElementShortName">b_tick_cnt_reg[3:0]</obj_property>
+         <obj_property name="ObjectShortName">b_tick_cnt_reg[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/b_tick_cnt_next" type="array">
+         <obj_property name="ElementShortName">b_tick_cnt_next[3:0]</obj_property>
+         <obj_property name="ObjectShortName">b_tick_cnt_next[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/busy_reg" type="logic">
+         <obj_property name="ElementShortName">busy_reg</obj_property>
+         <obj_property name="ObjectShortName">busy_reg</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/busy_next" type="logic">
+         <obj_property name="ElementShortName">busy_next</obj_property>
+         <obj_property name="ObjectShortName">busy_next</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/done_reg" type="logic">
+         <obj_property name="ElementShortName">done_reg</obj_property>
+         <obj_property name="ObjectShortName">done_reg</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/done_next" type="logic">
+         <obj_property name="ElementShortName">done_next</obj_property>
+         <obj_property name="ObjectShortName">done_next</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/data_in_buf_reg" type="array">
+         <obj_property name="ElementShortName">data_in_buf_reg[7:0]</obj_property>
+         <obj_property name="ObjectShortName">data_in_buf_reg[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_UART_TX/data_in_buf_next" type="array">
+         <obj_property name="ElementShortName">data_in_buf_next[7:0]</obj_property>
+         <obj_property name="ObjectShortName">data_in_buf_next[7:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group1310" type="group">
+      <obj_property name="label">baud_tick</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/tick_sel" type="array">
+         <obj_property name="ElementShortName">tick_sel[1:0]</obj_property>
+         <obj_property name="ObjectShortName">tick_sel[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/b_tick" type="logic">
+         <obj_property name="ElementShortName">b_tick</obj_property>
+         <obj_property name="ObjectShortName">b_tick</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/counter_reg" type="array">
+         <obj_property name="ElementShortName">counter_reg[9:0]</obj_property>
+         <obj_property name="ObjectShortName">counter_reg[9:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/BAUDRATE1" type="array">
+         <obj_property name="ElementShortName">BAUDRATE1[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BAUDRATE1[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/BAUDRATE2" type="array">
+         <obj_property name="ElementShortName">BAUDRATE2[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BAUDRATE2[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/BAUDRATE3" type="array">
+         <obj_property name="ElementShortName">BAUDRATE3[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BAUDRATE3[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/F_COUNT_00" type="array">
+         <obj_property name="ElementShortName">F_COUNT_00[31:0]</obj_property>
+         <obj_property name="ObjectShortName">F_COUNT_00[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/F_COUNT_01" type="array">
+         <obj_property name="ElementShortName">F_COUNT_01[31:0]</obj_property>
+         <obj_property name="ObjectShortName">F_COUNT_01[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/U_BAUD_TICK/F_COUNT_10" type="array">
+         <obj_property name="ElementShortName">F_COUNT_10[31:0]</obj_property>
+         <obj_property name="ObjectShortName">F_COUNT_10[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group1250" type="group">
+      <obj_property name="label">apb uart</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PCLK" type="logic">
+         <obj_property name="ElementShortName">PCLK</obj_property>
+         <obj_property name="ObjectShortName">PCLK</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PRESET" type="logic">
+         <obj_property name="ElementShortName">PRESET</obj_property>
+         <obj_property name="ObjectShortName">PRESET</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PADDR" type="array">
+         <obj_property name="ElementShortName">PADDR[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PADDR[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PWDATA" type="array">
+         <obj_property name="ElementShortName">PWDATA[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PWDATA[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PENABLE" type="logic">
+         <obj_property name="ElementShortName">PENABLE</obj_property>
+         <obj_property name="ObjectShortName">PENABLE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PWRITE" type="logic">
+         <obj_property name="ElementShortName">PWRITE</obj_property>
+         <obj_property name="ObjectShortName">PWRITE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PSEL" type="logic">
+         <obj_property name="ElementShortName">PSEL</obj_property>
+         <obj_property name="ObjectShortName">PSEL</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/uart_rx" type="logic">
+         <obj_property name="ElementShortName">uart_rx</obj_property>
+         <obj_property name="ObjectShortName">uart_rx</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/uart_tx" type="logic">
+         <obj_property name="ElementShortName">uart_tx</obj_property>
+         <obj_property name="ObjectShortName">uart_tx</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PRDATA" type="array">
+         <obj_property name="ElementShortName">PRDATA[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PRDATA[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/PREADY" type="logic">
+         <obj_property name="ElementShortName">PREADY</obj_property>
+         <obj_property name="ObjectShortName">PREADY</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_CTL_REG" type="array">
+         <obj_property name="ElementShortName">UART_CTL_REG[7:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_CTL_REG[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_STATUS_REG" type="array">
+         <obj_property name="ElementShortName">UART_STATUS_REG[7:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_STATUS_REG[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_BAUD_REG" type="array">
+         <obj_property name="ElementShortName">UART_BAUD_REG[15:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_BAUD_REG[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_TX_DATA_REG" type="array">
+         <obj_property name="ElementShortName">UART_TX_DATA_REG[7:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_TX_DATA_REG[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_RX_DATA_REG" type="array">
+         <obj_property name="ElementShortName">UART_RX_DATA_REG[7:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_RX_DATA_REG[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/tx_busy" type="logic">
+         <obj_property name="ElementShortName">tx_busy</obj_property>
+         <obj_property name="ObjectShortName">tx_busy</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/rx_done" type="logic">
+         <obj_property name="ElementShortName">rx_done</obj_property>
+         <obj_property name="ObjectShortName">rx_done</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/b_tick" type="logic">
+         <obj_property name="ElementShortName">b_tick</obj_property>
+         <obj_property name="ObjectShortName">b_tick</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_CTL_ADDR" type="array">
+         <obj_property name="ElementShortName">UART_CTL_ADDR[11:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_CTL_ADDR[11:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_BAUD_ADDR" type="array">
+         <obj_property name="ElementShortName">UART_BAUD_ADDR[11:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_BAUD_ADDR[11:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_STATUS_ADDR" type="array">
+         <obj_property name="ElementShortName">UART_STATUS_ADDR[11:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_STATUS_ADDR[11:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_TX_DATA_ADDR" type="array">
+         <obj_property name="ElementShortName">UART_TX_DATA_ADDR[11:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_TX_DATA_ADDR[11:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_UART/UART_RX_DATA_ADDR" type="array">
+         <obj_property name="ElementShortName">UART_RX_DATA_ADDR[11:0]</obj_property>
+         <obj_property name="ObjectShortName">UART_RX_DATA_ADDR[11:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group5053" type="group">
+      <obj_property name="label">apb fnd</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PCLK" type="logic">
+         <obj_property name="ElementShortName">PCLK</obj_property>
+         <obj_property name="ObjectShortName">PCLK</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PRESET" type="logic">
+         <obj_property name="ElementShortName">PRESET</obj_property>
+         <obj_property name="ObjectShortName">PRESET</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PADDR" type="array">
+         <obj_property name="ElementShortName">PADDR[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PADDR[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PWDATA" type="array">
+         <obj_property name="ElementShortName">PWDATA[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PWDATA[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PENABLE" type="logic">
+         <obj_property name="ElementShortName">PENABLE</obj_property>
+         <obj_property name="ObjectShortName">PENABLE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PWRITE" type="logic">
+         <obj_property name="ElementShortName">PWRITE</obj_property>
+         <obj_property name="ObjectShortName">PWRITE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PSEL" type="logic">
+         <obj_property name="ElementShortName">PSEL</obj_property>
+         <obj_property name="ObjectShortName">PSEL</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PRDATA" type="array">
+         <obj_property name="ElementShortName">PRDATA[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PRDATA[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/PREADY" type="logic">
+         <obj_property name="ElementShortName">PREADY</obj_property>
+         <obj_property name="ObjectShortName">PREADY</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/fnd_digit" type="array">
+         <obj_property name="ElementShortName">fnd_digit[3:0]</obj_property>
+         <obj_property name="ObjectShortName">fnd_digit[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/fnd_data" type="array">
+         <obj_property name="ElementShortName">fnd_data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">fnd_data[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/FND_REG" type="array">
+         <obj_property name="ElementShortName">FND_REG[15:0]</obj_property>
+         <obj_property name="ObjectShortName">FND_REG[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/FND_ADDR" type="array">
+         <obj_property name="ElementShortName">FND_ADDR[11:0]</obj_property>
+         <obj_property name="ObjectShortName">FND_ADDR[11:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/fnd_in_data" type="array">
+         <obj_property name="ElementShortName">fnd_in_data[13:0]</obj_property>
+         <obj_property name="ObjectShortName">fnd_in_data[13:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/fnd_digit" type="array">
+         <obj_property name="ElementShortName">fnd_digit[3:0]</obj_property>
+         <obj_property name="ObjectShortName">fnd_digit[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/fnd_data" type="array">
+         <obj_property name="ElementShortName">fnd_data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">fnd_data[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/w_digit_1" type="array">
+         <obj_property name="ElementShortName">w_digit_1[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_digit_1[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/w_digit_10" type="array">
+         <obj_property name="ElementShortName">w_digit_10[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_digit_10[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/w_digit_100" type="array">
+         <obj_property name="ElementShortName">w_digit_100[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_digit_100[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/w_digit_1000" type="array">
+         <obj_property name="ElementShortName">w_digit_1000[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_digit_1000[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/w_mux_4x1_out" type="array">
+         <obj_property name="ElementShortName">w_mux_4x1_out[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_mux_4x1_out[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/w_digit_sel" type="array">
+         <obj_property name="ElementShortName">w_digit_sel[1:0]</obj_property>
+         <obj_property name="ObjectShortName">w_digit_sel[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_FND/U_FND_CTL/w_1khz" type="logic">
+         <obj_property name="ElementShortName">w_1khz</obj_property>
+         <obj_property name="ObjectShortName">w_1khz</obj_property>
+      </wvobject>
    </wvobject>
    <wvobject fp_name="group3405" type="group">
       <obj_property name="label">apb gpio</obj_property>
@@ -149,8 +565,8 @@
          <obj_property name="ObjectShortName">PSEL</obj_property>
       </wvobject>
       <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_GPI/GPI_IN" type="array">
-         <obj_property name="ElementShortName">GPI_IN[15:0]</obj_property>
-         <obj_property name="ObjectShortName">GPI_IN[15:0]</obj_property>
+         <obj_property name="ElementShortName">GPI_IN[7:0]</obj_property>
+         <obj_property name="ObjectShortName">GPI_IN[7:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_GPI/PRDATA" type="array">
          <obj_property name="ElementShortName">PRDATA[31:0]</obj_property>
@@ -218,8 +634,8 @@
          <obj_property name="ObjectShortName">PREADY</obj_property>
       </wvobject>
       <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_GPO/GPO_OUT" type="array">
-         <obj_property name="ElementShortName">GPO_OUT[15:0]</obj_property>
-         <obj_property name="ObjectShortName">GPO_OUT[15:0]</obj_property>
+         <obj_property name="ElementShortName">GPO_OUT[7:0]</obj_property>
+         <obj_property name="ObjectShortName">GPO_OUT[7:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/tb_rv32i_multi/dut/U_APB_GPO/GPO_DATA_REG" type="array">
          <obj_property name="ElementShortName">GPO_DATA_REG[15:0]</obj_property>

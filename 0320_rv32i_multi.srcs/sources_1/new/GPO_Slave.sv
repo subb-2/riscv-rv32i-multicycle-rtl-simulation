@@ -10,7 +10,7 @@ module GPO_Slave (
     input         PSEL,
     output [31:0] PRDATA,
     output        PREADY,
-    output [15:0] GPO_OUT
+    output [7:0] GPO_OUT
 );
     localparam [11:0] GPO_CTL_ADDR = 12'h000;
     localparam [11:0] GPO_DATA_ADDR = 12'h004;
@@ -43,7 +43,7 @@ module GPO_Slave (
     //always comb 반복 보다 간단 
     genvar i;
     generate
-        for(i = 0; i < 16; i++) begin
+        for(i = 0; i < 8; i++) begin
             assign GPO_OUT[i] = (GPO_CTL_REG[i]) ? GPO_DATA_REG[i] : 1'bz;
         end
     endgenerate

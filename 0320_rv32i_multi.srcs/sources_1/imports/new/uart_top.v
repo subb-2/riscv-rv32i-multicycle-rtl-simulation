@@ -1,44 +1,5 @@
 `timescale 1ns / 1ps
 
-module uart_top (
-    input        clk,
-    input        rst,
-    //input        btn_down,
-    input        uart_rx,
-    output       uart_tx
-);
-
-    wire w_b_tick, w_rx_done;
-    wire [7:0] w_rx_data;
-
-    uart_tx U_UART_TX (
-        .clk(clk),
-        .rst(rst),
-        .tx_start(w_rx_done),
-        .b_tick(w_b_tick),
-        .tx_data(w_rx_data),
-        .tx_busy(),
-        .tx_done(),
-        .uart_tx(uart_tx)
-    );
-
-    uart_rx U_UART_RX (
-        .clk(clk),
-        .rst(rst),
-        .rx(uart_rx),
-        .b_tick(w_b_tick),
-        .rx_data(w_rx_data),
-        .rx_done(w_rx_done)
-    );
-
-    baud_tick U_BAUD_TICK (
-        .clk(clk),
-        .rst(rst),
-        .b_tick(w_b_tick)
-    );
-
-endmodule
-
 module uart_rx (
     input        clk,
     input        rst,
@@ -90,10 +51,10 @@ module uart_rx (
                 b_tick_cnt_next = 5'd0;
                 bit_cnt_next    = 3'd0;
                 done_next       = 1'b0;
-                
+
                 if (b_tick & !rx) begin
-                    buf_next        = 8'd0;
-                    n_state = START;
+                    buf_next = 8'd0;
+                    n_state  = START;
                 end
             end
             START: begin
@@ -122,7 +83,7 @@ module uart_rx (
                 end
             end
 
-            STOP : begin
+            STOP: begin
                 if (b_tick) begin
                     if (b_tick_cnt_reg == 16) begin
                         n_state   = IDLE;
@@ -280,32 +241,66 @@ endmodule
 
 module baud_tick (
     // 주기 : 1/9600
-    input      clk,
-    input      rst,
-    output reg b_tick
+    input            clk,
+    input            rst,
+    input      [1:0] tick_sel,
+    output reg       b_tick
 );
 
     //순차논리의 카운트 값으로 주기 돌리기 
     //100MHz / 9600 만큼 카운트해서 tick 1 만들기 
     // 651, 6.51ns 마다 
-    parameter BAUDRATE = 9600 * 16;
-    parameter F_COUNT = 100_000_000 / BAUDRATE;
+    parameter BAUDRATE1 = 9600 * 16;
+    parameter BAUDRATE2 = 19200 * 16;
+    parameter BAUDRATE3 = 115200 * 16;
+
+    parameter F_COUNT_00 = 100_000_000 / BAUDRATE1;
+    parameter F_COUNT_01 = 100_000_000 / BAUDRATE2;
+    parameter F_COUNT_10 = 100_000_000 / BAUDRATE3;
+
     // reg for counter
     // clog2는 자동 올림되어 나타남 1.1 = 2 로 return 
-    reg [$clog2(F_COUNT) - 1:0] counter_reg;
+    reg [$clog2(F_COUNT_00) - 1:0] counter_reg;
 
     always @(posedge clk, posedge rst) begin
         if (rst) begin
             counter_reg <= 0;
             b_tick <= 1'b0;
         end else begin
-            counter_reg <= counter_reg + 1;
-            if (counter_reg == (F_COUNT - 1)) begin
-                counter_reg <= 0;
-                b_tick <= 1'b1;
-            end else begin
-                b_tick <= 1'b0;
-            end
+            case (tick_sel)
+                2'b00: begin
+                    counter_reg <= counter_reg + 1;
+                    if (counter_reg == (F_COUNT_00 - 1)) begin
+                        counter_reg <= 0;
+                        b_tick <= 1'b1;
+                    end else begin
+                        b_tick <= 1'b0;
+                    end 
+                end 
+                2'b01: begin
+                    counter_reg <= counter_reg + 1;
+                    if (counter_reg == (F_COUNT_01 - 1)) begin
+                        counter_reg <= 0;
+                        b_tick <= 1'b1;
+                    end else begin
+                        b_tick <= 1'b0;
+                    end 
+                end 
+                2'b10: begin
+                    counter_reg <= counter_reg + 1;
+                    if (counter_reg == (F_COUNT_10 - 1)) begin
+                        counter_reg <= 0;
+                        b_tick <= 1'b1;
+                    end else begin
+                        b_tick <= 1'b0;
+                    end 
+                end 
+                default: begin 
+                    counter_reg <= 0;
+                    b_tick <= 0;
+                end
+            endcase
+            
         end
     end
 

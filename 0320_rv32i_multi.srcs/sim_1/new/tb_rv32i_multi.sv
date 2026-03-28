@@ -1,19 +1,25 @@
 `timescale 1ns / 1ps
 
-module tb_rv32i_multi();
+module tb_rv32i_multi ();
 
     logic clk, rst;
     logic [7:0] GPO, GPI;
-    wire [15:0] GPIO;
+    logic uart_rx, uart_tx;
+    logic [ 3:0] fnd_digit;
+    logic [ 7:0] fnd_data;
+    wire  [15:0] GPIO;
 
     rv32I_mcu dut (
         .clk(clk),
         .rst(rst),
         .GPI(GPI),
+        .uart_rx(uart_rx),
+        .uart_tx(uart_tx),
+        .fnd_digit(fnd_digit),
+        .fnd_data(fnd_data),
         .GPO(GPO),
         .GPIO(GPIO)
     );
-
 
     always #5 clk = ~clk;
 
@@ -26,9 +32,9 @@ module tb_rv32i_multi();
         @(negedge clk);
         @(negedge clk);
         rst = 0;
-        GPI = 8'haa; 
-        repeat(4000) @(negedge clk); 
-        
+        GPI = 8'haa;
+        repeat (4000) @(negedge clk);
+
         //sw = 16'h00ff;
         //repeat(100) @(negedge clk);
 
@@ -39,4 +45,3 @@ module tb_rv32i_multi();
     end
 
 endmodule
- 

@@ -14,7 +14,7 @@ module APB_FND (
     output [ 7:0] fnd_data
 );
 
-    localparam [11:0] FND_ADDR = 12'h000;
+    localparam [11:0] FND_ADDR = 12'h004;
     logic [15:0] FND_REG;
 
     assign PREADY = (PENABLE & PSEL) ? 1'b1 : 1'b0;
@@ -42,5 +42,5 @@ module APB_FND (
         .fnd_digit(fnd_digit),
         .fnd_data(fnd_data)
     );
-
+ 
 endmodule

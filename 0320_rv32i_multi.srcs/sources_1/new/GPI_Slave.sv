@@ -8,7 +8,7 @@ module GPI_Slave (
     input               PENABLE,
     input               PWRITE,
     input               PSEL,
-    input        [15:0] GPI_IN,
+    input        [7:0] GPI_IN,
     output logic [31:0] PRDATA,
     output logic        PREADY
 );
@@ -40,7 +40,7 @@ module GPI_Slave (
 
     genvar i;
     generate
-        for (i = 0; i < 16; i++) begin
+        for (i = 0; i < 8; i++) begin
             assign GPI_IDATA_REG[i] = (GPI_CTL_REG[i]) ? GPI_IN[i] : 1'bz;
         end
     endgenerate

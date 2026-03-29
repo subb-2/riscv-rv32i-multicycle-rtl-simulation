@@ -29,11 +29,12 @@ module tb_rv32i_multi ();
         GPI = 8'h00;
         //GPO = 16'h0000;
         //GPIO = 16'h0000;
+        uart_rx = 1;
         @(negedge clk);
         @(negedge clk);
         rst = 0;
         GPI = 8'haa;
-        repeat (4000) @(negedge clk);
+        repeat (100000) @(negedge clk);
 
         //sw = 16'h00ff;
         //repeat(100) @(negedge clk);

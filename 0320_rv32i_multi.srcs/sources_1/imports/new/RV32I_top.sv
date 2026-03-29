@@ -11,6 +11,7 @@ module rv32I_mcu (
     output [7:0] GPO,
     inout  [15:0] GPIO 
 );
+//git test 
     logic bus_wreq, bus_rreq, bus_ready;
     logic [2:0] o_funct3;
     logic [31:0] instr_addr, instr_data, bus_addr, bus_wdata, bus_rdata;

@@ -36,13 +36,18 @@ module APB_UART (
 
     logic [7:0] UART_CTL_REG, UART_STATUS_REG;
     logic [15:0] UART_BAUD_REG;
-    logic [7:0] UART_TX_DATA_REG, UART_RX_DATA_REG;
+    logic [ 7:0] UART_TX_DATA_REG;
 
-    logic tx_busy, rx_done, b_tick; 
+    logic tx_busy, tx_start, b_tick;
+
+    logic [7:0] rx_data;
+    logic       rx_done;
+    logic       rx_done_flag;
+    logic [7:0] UART_RX_DATA_REG;
 
     assign PREADY = (PENABLE & PSEL) ? 1'b1 : 1'b0;
 
-    assign UART_STATUS_REG = {rx_done, 6'b000000, tx_busy};
+    assign UART_STATUS_REG = {rx_done_flag, 6'b000000, tx_busy};
 
     //extantion vs padding??
     assign PRDATA = (PADDR[11:0] == UART_CTL_ADDR)  ? {24'h0000, UART_CTL_REG} : 
@@ -57,16 +62,30 @@ module APB_UART (
             UART_CTL_REG <= 8'h00;
             UART_BAUD_REG <= 16'h0000;
             UART_TX_DATA_REG <= 8'h00;
+            UART_RX_DATA_REG <= 8'h00;
+            tx_start <= 1'b0;
+            rx_done_flag <= 1'b0;
         end else begin
+            tx_start <= 1'b0;
             if (PREADY & PWRITE) begin
                 case (PADDR[11:0])
-                    UART_CTL_ADDR: UART_CTL_REG <= PWDATA[7:0];
+                    UART_CTL_ADDR: begin
+                        UART_CTL_REG <= PWDATA[7:0];
+                        if (PWDATA[0]) tx_start <= 1'b1;
+                    end
                     UART_BAUD_ADDR: UART_BAUD_REG <= PWDATA[15:0];
                     UART_TX_DATA_ADDR: UART_TX_DATA_REG <= PWDATA[7:0];
                     //만약 CPU가 통신 속도를 설정(UART_BAUD_REG)하거나, 
                     //전송 시작 명령을 내리려면(UART_CTL_REG)
                     //해당 레지스터들도 APB 버스를 통해 값을 쓸 수 있도록 case 문에 추가
                 endcase
+            end
+            if (rx_done) begin
+                UART_RX_DATA_REG <= rx_data;
+                rx_done_flag <= 1'b1;
+            end
+            else if (PSEL && PENABLE && !PWRITE && (PADDR[11:0] == UART_RX_DATA_ADDR)) begin
+                rx_done_flag <= 1'b0;
             end
         end
     end
@@ -75,11 +94,11 @@ module APB_UART (
     uart_tx U_UART_TX (
         .clk(PCLK),
         .rst(PRESET),
-        .tx_start(UART_CTL_REG[0]),
+        .tx_start(tx_start),
         .b_tick(b_tick),
         .tx_data(UART_TX_DATA_REG),
         .tx_busy(tx_busy),
-        .tx_done(), //필요 없음 
+        .tx_done(),  //필요 없음 
         .uart_tx(uart_tx)
     );
 
@@ -88,7 +107,7 @@ module APB_UART (
         .rst(PRESET),
         .rx(uart_rx),
         .b_tick(b_tick),
-        .rx_data(UART_RX_DATA_REG),
+        .rx_data(rx_data),
         .rx_done(rx_done)
     );
 

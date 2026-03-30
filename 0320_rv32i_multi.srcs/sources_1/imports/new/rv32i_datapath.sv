@@ -255,13 +255,13 @@ module register_file (
     logic [31:0] register_file[1:31];  // x0 must have zero value 
 
     //simulation 할 때만 들어감 
-//`ifdef SIMULATION
-//    initial begin
-//        for (int i = 1; i < 32; i++) begin
-//            register_file[i] = i;
-//        end
-//    end
-//`endif
+`ifdef SIMULATION
+    initial begin
+        for (int i = 1; i < 32; i++) begin
+            register_file[i] = i;
+        end
+    end
+`endif
 
     //0번지 hard wire -> 0번지 assess되면 항상 0 나가도록 메모리 뭐 하라고?
     //assign if 

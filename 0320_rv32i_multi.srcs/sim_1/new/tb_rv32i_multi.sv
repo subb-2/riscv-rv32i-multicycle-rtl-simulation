@@ -34,7 +34,7 @@ module tb_rv32i_multi ();
         @(negedge clk);
         rst = 0;
         GPI = 8'haa;
-        repeat (100000) @(negedge clk);
+        repeat (1000) @(negedge clk);
 
         //sw = 16'h00ff;
         //repeat(100) @(negedge clk);

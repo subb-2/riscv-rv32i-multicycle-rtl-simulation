@@ -20,6 +20,7 @@ module instruction_mem (
         //$readmemh("APB_UART.mem", rom);
         $readmemh("Final.mem", rom);
 
+
         //hex 값이니까 readmemh로 읽어야 함
         //저장할 위치도 알려줘야 함 : rom 
 

@@ -17,7 +17,8 @@ module instruction_mem (
         //$readmemh("APB_BRAM_GPO_GPI.mem",rom); 
         //$readmemh("APB_GPIO_LED_BLINK.mem",rom); 
         //$readmemh("APB_FND.mem",rom); 
-        $readmemh("APB_UART.mem", rom);
+        //$readmemh("APB_UART.mem", rom);
+        $readmemh("Final.mem", rom);
 
         //hex 값이니까 readmemh로 읽어야 함
         //저장할 위치도 알려줘야 함 : rom 

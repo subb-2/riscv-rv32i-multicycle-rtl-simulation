@@ -20,24 +20,24 @@ module APB_Master (
     output logic        PENABLE,  // logic 으로 출력 나가야 함 
     output logic        PWRITE,   // logic으로 출력 나가야 함 
     output logic        PSEL0,    //RAM
-    output logic        PSEL1,    //GPO
-    output logic        PSEL2,    //GPI
-    output logic        PSEL3,    //GPIO
-    output logic        PSEL4,    //FND
-    output logic        PSEL5,    //UART
+    //output logic        PSEL1,    //GPO
+    //output logic        PSEL2,    //GPI
+    output logic        PSEL1,    //GPIO
+    output logic        PSEL2,    //FND
+    output logic        PSEL3,    //UART
 
     input [31:0] PRDATA0,  // from RAM
-    input [31:0] PRDATA1,  // from GPO //왜 받을게 없어?
-    input [31:0] PRDATA2,  // from GPI
-    input [31:0] PRDATA3,  // from GPIO
-    input [31:0] PRDATA4,  // from FND //stataus를 읽을 수도 있으니까
-    input [31:0] PRDATA5,  // from UART
+    //input [31:0] PRDATA1,  // from GPO //왜 받을게 없어?
+    //input [31:0] PRDATA2,  // from GPI
+    input [31:0] PRDATA1,  // from GPIO
+    input [31:0] PRDATA2,  // from FND //stataus를 읽을 수도 있으니까
+    input [31:0] PRDATA3,  // from UART
     input        PREADY0,  // from RAM
-    input        PREADY1,  // from GPO
-    input        PREADY2,  // from GPI
-    input        PREADY3,  // from GPIO
-    input        PREADY4,  // from FND 
-    input        PREADY5   // from UART 
+    //input        PREADY1,  // from GPO
+    //input        PREADY2,  // from GPI
+    input        PREADY1,  // from GPIO
+    input        PREADY2,  // from FND 
+    input        PREADY3   // from UART 
 );
 
     typedef enum {
@@ -119,27 +119,27 @@ module APB_Master (
         .en(decode_en),
         .addr(PADDR),
         .psel0(PSEL0),
+        //.psel1(PSEL1),
+        //.psel2(PSEL2),
         .psel1(PSEL1),
         .psel2(PSEL2),
-        .psel3(PSEL3),
-        .psel4(PSEL4),
-        .psel5(PSEL5)
+        .psel3(PSEL3)
     );
 
     apb_mux U_APB_MUX (
         .sel(PADDR),
         .PRDATA0(PRDATA0),
+        //.PRDATA1(PRDATA1),
+        //.PRDATA2(PRDATA2),
         .PRDATA1(PRDATA1),
         .PRDATA2(PRDATA2),
         .PRDATA3(PRDATA3),
-        .PRDATA4(PRDATA4),
-        .PRDATA5(PRDATA5),
         .PREADY0(PREADY0),
+        //.PREADY1(PREADY1),
+        //.PREADY2(PREADY2),
         .PREADY1(PREADY1),
         .PREADY2(PREADY2),
         .PREADY3(PREADY3),
-        .PREADY4(PREADY4),
-        .PREADY5(PREADY5),
         .Rdata(Rdata),
         .Ready(Ready)
     );
@@ -150,30 +150,30 @@ module addr_decoder (
     input               en,
     input        [31:0] addr,
     output logic        psel0,
+    //output logic        psel1,
+    //output logic        psel2,
     output logic        psel1,
     output logic        psel2,
-    output logic        psel3,
-    output logic        psel4,
-    output logic        psel5
+    output logic        psel3
 );
 
     always_comb begin
         psel0 = 1'b0;  //idle : 0
+        //psel1 = 1'b0;  //idle : 0
+        //psel2 = 1'b0;  //idle : 0
         psel1 = 1'b0;  //idle : 0
         psel2 = 1'b0;  //idle : 0
         psel3 = 1'b0;  //idle : 0
-        psel4 = 1'b0;  //idle : 0
-        psel5 = 1'b0;  //idle : 0
         if (en) begin
             case (addr[31:28])  // instead of casex
                 4'h1: psel0 = 1'b1;
                 4'h2: begin
                     case (addr[15:12])
+                        //4'h0: psel1 = 1'b1;
+                        //4'h1: psel2 = 1'b1;
                         4'h0: psel1 = 1'b1;
                         4'h1: psel2 = 1'b1;
                         4'h2: psel3 = 1'b1;
-                        4'h3: psel4 = 1'b1;
-                        4'h4: psel5 = 1'b1;
                     endcase
                 end
             endcase
@@ -185,17 +185,17 @@ endmodule
 module apb_mux (
     input        [31:0] sel,
     input        [31:0] PRDATA0,
+    //input        [31:0] PRDATA1,
+    //input        [31:0] PRDATA2,
     input        [31:0] PRDATA1,
     input        [31:0] PRDATA2,
     input        [31:0] PRDATA3,
-    input        [31:0] PRDATA4,
-    input        [31:0] PRDATA5,
     input               PREADY0,
+    //input               PREADY1,
+    //input               PREADY2,
     input               PREADY1,
     input               PREADY2,
     input               PREADY3,
-    input               PREADY4,
-    input               PREADY5,
     output logic [31:0] Rdata,
     output logic        Ready
 );
@@ -210,6 +210,14 @@ module apb_mux (
             end
             4'h2: begin
                 case (sel[15:12])
+                    //4'h0: begin
+                    //    Rdata = PRDATA1;
+                    //    Ready = PREADY1;
+                    //end
+                    //4'h1: begin
+                    //    Rdata = PRDATA2;
+                    //    Ready = PREADY2;
+                    //end
                     4'h0: begin
                         Rdata = PRDATA1;
                         Ready = PREADY1;
@@ -221,14 +229,6 @@ module apb_mux (
                     4'h2: begin
                         Rdata = PRDATA3;
                         Ready = PREADY3;
-                    end
-                    4'h3: begin
-                        Rdata = PRDATA4;
-                        Ready = PREADY4;
-                    end
-                    4'h4: begin
-                        Rdata = PRDATA5;
-                        Ready = PREADY5;
                     end
                 endcase
             end

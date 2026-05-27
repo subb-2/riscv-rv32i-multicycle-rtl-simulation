@@ -224,7 +224,7 @@ WNS +0.333 ns로 모든 타이밍 제약 통과.
 
 | 이름 | 담당 |
 |------|------|
-| 조승아 | 프로젝트 총괄, System Architecture 설계, Multi-Cycle CPU 구현 |
+| 조승아 | System Architecture 설계, Multi-Cycle CPU 구현 |
 | 김수빈 | APB Bus Master 설계, BRAM 슬레이브 구현 및 시뮬레이션 |
 | 장현동 | GPIO / FND 슬레이브 설계, 시뮬레이션, FPGA 동작 검증 |
 | 문태성 | UART 슬레이브 설계, 시뮬레이션, FPGA 동작 검증 |

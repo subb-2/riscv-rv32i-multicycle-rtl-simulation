@@ -2,7 +2,7 @@
 
 > RISC-V RV32I ISA 기반 Multi-Cycle CPU + APB Bus + Peripheral을 설계한 SoC 프로젝트  
 > Xilinx Basys3 (Artix-7) FPGA에서 C 펌웨어 동작까지 검증 완료
-> - **Language:** SystemVerilog
+
 ---
 
 ## 📌 프로젝트 개요

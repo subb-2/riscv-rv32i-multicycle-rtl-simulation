@@ -2,7 +2,7 @@
 
 > RISC-V RV32I ISA 기반 Multi-Cycle CPU + APB Bus + Peripheral을 설계한 SoC 프로젝트  
 > Xilinx Basys3 (Artix-7) FPGA에서 C 펌웨어 동작까지 검증 완료
-
+> - **Language:** SystemVerilog
 ---
 
 ## 📌 프로젝트 개요
@@ -11,7 +11,7 @@
 **APB Bus Master**를 통해 BRAM / GPIO / FND / UART 페리페럴을 연결한 완성형 SoC입니다.
 
 C 코드를 RISC-V 어셈블리로 크로스 컴파일한 `.mem` 파일을 ROM에 탑재하여,  
-스위치 입력 → FND 출력 → UART 전송의 통합 시나리오를 FPGA에서 실제 동작 검증하였습니다.
+**스위치 입력 → FND 출력 → UART 전송**의 통합 시나리오를 FPGA에서 실제 동작 검증하였습니다.
 
 Single-Cycle 대비 Multi-Cycle 전환 후 타이밍 위반(WNS −2.874 ns → +0.333 ns)이 해소되었습니다.
 

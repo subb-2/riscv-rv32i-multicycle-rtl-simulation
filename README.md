@@ -30,27 +30,10 @@ Single-Cycle 대비 Multi-Cycle 전환 후 타이밍 위반(WNS −2.874 ns → 
 
 ## 🏗️ System Architecture
 
-<img width="2133" height="1441" alt="Image" src="https://github.com/user-attachments/assets/7f56c930-f64b-4de5-a915-889cb11a2254" />
 ```
 
+<img width="2133" height="1441" alt="Image" src="https://github.com/user-attachments/assets/7f56c930-f64b-4de5-a915-889cb11a2254" />
 
-                        ┌──────────────────────────────────────────────────┐
-                         │                  rv32I_mcu (Top)                 │
-                         │                                                  │
-  clk ─────────────────► │  ┌──────────────┐   ┌──────────────────────────┐│
-  rst ─────────────────► │  │instruction   │   │       APB Bus Master     ││
-  GPIO[15:0] (inout) ──► │  │    _mem(ROM) │   │  IDLE → SETUP → ACCESS  ││
-  uart_rx ─────────────► │  └──────┬───────┘   │  addr_decoder / apb_mux ││
-  GPI[7:0] ────────────► │   instr │            └──────────┬───────────────┘│
-                         │         ▼                       │ APB Bus         │
-                         │  ┌──────────────┐    ┌─────────▼──────────────┐ │
-                         │  │  RV32I_cpu   │    │  BRAM │ GPIO │ FND │   │ │
-                         │  │(Multi-Cycle) │◄──►│       APB Slaves       │ │
-                         │  └──────────────┘    └────────────────────────┘ │
-                         └──────────────────────────────────────────────────┘
-                                                        │
-                              fnd_digit / fnd_data ─────┤
-                              GPO / uart_tx ────────────┘
 ```
 
 ---

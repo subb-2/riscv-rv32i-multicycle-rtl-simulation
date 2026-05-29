@@ -17,6 +17,17 @@ Single-Cycle 대비 Multi-Cycle 전환 후 타이밍 위반(WNS −2.874 ns → 
 
 ---
 
+## 👥 팀 구성
+
+| 이름 | 담당 |
+|------|------|
+| 조승아 | System Architecture 설계, Multi-Cycle CPU 구현 |
+| 김수빈 | APB Bus Master 설계, BRAM 슬레이브 구현 및 시뮬레이션 |
+| 장현동 | GPIO / FND 슬레이브 설계, 시뮬레이션, FPGA 동작 검증 |
+| 문태성 | UART 슬레이브 설계, 시뮬레이션, FPGA 동작 검증 |
+
+---
+
 ## 🏗️ System Architecture
 
 ```
@@ -217,17 +228,6 @@ WNS +0.333 ns로 모든 타이밍 제약 통과.
 
 **해결**: CTL/ODATA/IDATA 레지스터를 가진 단일 `APB_GPIO` 슬레이브로 통합.  
 `generate` 블록으로 핀별 tristate 버퍼 구현.
-
----
-
-## 👥 팀 구성
-
-| 이름 | 담당 |
-|------|------|
-| 조승아 | System Architecture 설계, Multi-Cycle CPU 구현 |
-| 김수빈 | APB Bus Master 설계, BRAM 슬레이브 구현 및 시뮬레이션 |
-| 장현동 | GPIO / FND 슬레이브 설계, 시뮬레이션, FPGA 동작 검증 |
-| 문태성 | UART 슬레이브 설계, 시뮬레이션, FPGA 동작 검증 |
 
 ---
 

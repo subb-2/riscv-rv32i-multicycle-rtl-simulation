@@ -159,7 +159,7 @@ BRAM의 핵심 기능은 **CPU → APB Master → BRAM** 경로를 통한 읽기
 
 #### ① 0번지 읽기 — `bram_data0 = 0x20000830`
 
-C 코드의 `bram_data0 = *(__IO uint32_t *)APB_BRAM;`는 어셈블리 `lw a5, 0(a5)` (opcode `0007a783`)로 컴파일됩니다.
+C 코드의 읽기 연산은 `lw a5, 0(a5)` (opcode `0007a783`)로 컴파일됩니다.
 
 **CPU**
 

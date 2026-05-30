@@ -2,7 +2,7 @@
 
 📅 프로젝트 정보
 
-* 진행 기간: 2026.03 (3학년 2학기)
+* 진행 기간: 2026.03.19 ~ 2026.03.30
 * 설계 대상: RV32I Multi-Cycle CPU + APB Bus Master + Peripheral (BRAM / GPIO / FND / UART)
 * 기술 스택: `SystemVerilog`, `Vivado`, `Basys3 (Artix-7)`, `RISC-V GCC`
 

@@ -146,7 +146,7 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY=1)──�
 
 ---
 
-## 📄 알려진 제한 사항
+## 📄 향후 발전 방향 (Future Work)
 
 - 인터럽트 및 CSR 레지스터 미구현
 - UART RX 수신 데이터 인터럽트 미지원 (폴링 방식)

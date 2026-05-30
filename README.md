@@ -113,21 +113,71 @@ Single-Cycle 대비 Multi-Cycle 전환 후 타이밍 위반(WNS −2.874 ns → 
 
 ## 🔌 APB Bus Master
 
-ARM AMBA APB 프로토콜 기반의 3-state FSM으로 구현되었습니다.
+### AMBA & APB 개요
 
-```
-IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY)──► IDLE
-         decode_en=0       decode_en=1   decode_en=1
-         PENABLE=0         PENABLE=0     PENABLE=1
-```
+ARM AMBA(Advanced Microcontroller Bus Architecture)는 ARM사가 제공하는 버스 표준으로,
+성능 기준 AXI > AHB > APB 순으로 구성됩니다.
+
+**APB(Advanced Peripheral Bus)** 는 속도보다 전력 효율과 설계 단순성을 우선시하는
+저속 주변기기 연결용 버스로, 다음 특징을 가집니다.
+
+- 빠른 속도가 필요하지 않은 주변기기(BRAM, GPIO, FND, UART) 연결에 최적화
+- 전력 소비 최소화 및 인터페이스 복잡성 감소
+- Master(CPU 역할, 지시) / Slave(주변기기 역할, 수행) 구조
+
+### 주요 신호
+
+| 신호 이름 | 의미 | 핵심 기능 설명 |
+|-----------|------|----------------|
+| PCLK | Bus clock | 모든 APB 통신의 박자를 맞추는 시스템 클럭 |
+| PRESETn | APB reset | 시스템 초기화 신호 (Active LOW, 0일 때 초기화) |
+| PADDR [31:0] | APB address bus | 접근하고자 하는 주변기기의 32비트 레지스터 주소 |
+| PSELx | APB select | 여러 주변기기 중 통신할 대상을 고르는 신호 |
+| PENABLE | APB strobe | 데이터 전송의 두 번째 단계(Access) 진입을 알리는 활성화 신호 |
+| PWRITE | APB transfer direction | 데이터 전송 방향 결정 (1: 쓰기 / 0: 읽기) |
+| PRDATA [31:0] | APB read data bus | 주변기기에서 마스터로 읽어온 32비트 데이터 통로 |
+| PWDATA [31:0] | APB write data bus | 마스터에서 주변기기로 보내는 32비트 데이터 통로 |
+| PREADY | APB ready | Slave가 아직 준비되지 않았을 때 LOW로 설정하여 Master를 기다리게 하는 신호 |
+
+### FSM 구조
+
+ARM AMBA APB 프로토콜 기반의 3-state FSM으로 구현되었습니다.
 
 <p align="center">
 <img width="300" height="300" alt="Image" src="https://github.com/user-attachments/assets/a6a4c242-651e-48f6-a44f-446192948afe" />
 </p>
 
+- **IDLE**: 요청 대기 상태. `WREQ` 또는 `RREQ` 수신 시 SETUP으로 전이
+- **SETUP**: 주소·데이터·방향 신호 셋업. `decode_en=1`로 주소 디코더 활성화, `PENABLE=0`
+- **ACCESS**: 실제 데이터 전송. `PENABLE=1`. `PREADY=0`이면 이 상태 유지 (Wait state 지원)
+
+### 내부 구성 요소
+
 - **addr_decoder**: `PADDR[31:28]` 및 `PADDR[15:12]`로 PSEL0~PSEL3 자동 생성
 - **apb_mux**: PADDR 기준으로 해당 슬레이브의 PRDATA / PREADY를 CPU로 라우팅
-- Wait state 지원 — PREADY=0이면 ACCESS 상태 유지
+
+### APB Timing
+
+| 구분 | 타이밍 | 설명 |
+|------|--------|------|
+| Write (no wait) | IDLE→SETUP→ACCESS→IDLE (4클럭) | PREADY=1 즉시 응답 |
+| Write (wait) | IDLE→SETUP→ACCESS→ACCESS→…→IDLE | PREADY=0 동안 ACCESS 유지 |
+| Read (no wait) | IDLE→SETUP→ACCESS→IDLE (4클럭) | PRDATA combinational 출력 |
+| Read (wait) | IDLE→SETUP→ACCESS→ACCESS→…→IDLE | PREADY=1 시점에 PRDATA 확정 |
+
+> 제어 신호는 클럭 상승엣지에서 레지스터에 의해 결정됩니다 (조합 로직 지연).
+
+### 시뮬레이션 시나리오
+
+| 시나리오 | 타겟 (PSEL) | 할당 주소 | 동작 | Wait State | 테스트 데이터 | 검증 목적 |
+|----------|------------|-----------|------|-----------|--------------|----------|
+| Case 1 | RAM (PSEL0) | `0x1000_0000` | Write→Read | 0 Cycle | `0x0000_0077` | 지연 없는 즉각 응답 검증 |
+| Case 2 | GPIO (PSEL1) | `0x2000_0000` | Write→Read | 0 Cycle | W:`0xFF00_FF00` / R:`0x0000_00FF` | 지연 없는 즉각 응답 검증 |
+| Case 3 | FND (PSEL2) | `0x2000_1000` | Write→Read | 1 Cycle | W:`0x0000_6331` / R:`0x0000_6824` | 1클럭 Wait state 발생 시 Master 상태 유지(Hold) 검증 |
+| Case 4 | UART (PSEL3) | `0x2000_2000` | Write→Read | 2 Cycle | `0x0000_6331` | 다중 클럭 지연 발생 시 Master의 통신 안정성 검증 |
+
+시뮬레이션 결과 IDLE→SETUP→ACCESS→IDLE 상태 천이, Wait state 동안 ACCESS 유지,
+PREADY 수신 후 정상 복귀를 모두 확인하였습니다.
 
 ---
 

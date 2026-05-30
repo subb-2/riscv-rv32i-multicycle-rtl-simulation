@@ -30,7 +30,9 @@ Single-Cycle 대비 Multi-Cycle 전환 후 타이밍 위반(WNS −2.874 ns → 
 
 ## 🏗️ System Architecture
 
-<img width="900" alt="Image" src="https://github.com/user-attachments/assets/7f56c930-f64b-4de5-a915-889cb11a2254" />
+<p align="center">
+<img width="700" alt="Image" src="https://github.com/user-attachments/assets/7f56c930-f64b-4de5-a915-889cb11a2254" />
+</p>
 
 ---
 
@@ -119,7 +121,9 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY)──►
          PENABLE=0         PENABLE=0     PENABLE=1
 ```
 
+<p align="center">
 <img width="300" height="300" alt="Image" src="https://github.com/user-attachments/assets/a6a4c242-651e-48f6-a44f-446192948afe" />
+</p>
 
 - **addr_decoder**: `PADDR[31:28]` 및 `PADDR[15:12]`로 PSEL0~PSEL3 자동 생성
 - **apb_mux**: PADDR 기준으로 해당 슬레이브의 PRDATA / PREADY를 CPU로 라우팅

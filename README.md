@@ -148,6 +148,7 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY=1)──�
 
 ## 📄 향후 발전 방향 (Future Work)
 
+- Multi-Cycle은 타이밍 위반을 해소하나 CPI 3~5의 구조적 한계가 존재하며, 파이프라인 구조 도입으로 개선 가능
 - 인터럽트 및 CSR 레지스터 미구현
 - UART RX 수신 데이터 인터럽트 미지원 (폴링 방식)
 - BRAM 크기 1024 word(4 KB) — 대용량 펌웨어 탑재 시 조정 필요

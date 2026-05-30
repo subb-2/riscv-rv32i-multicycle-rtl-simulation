@@ -125,6 +125,116 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY)──►
 
 ---
 
+## 🧱 BRAM (APB BRAM Slave)
+
+### 구현 특징
+
+BRAM Slave는 APB 버스에 연결되는 **word-addressable 내부 RAM**으로, 1024 word(4 KB) 크기의 `logic [31:0] bmem[0:1024]` 배열로 구현하였습니다.
+
+```systemverilog
+logic [31:0] bmem[0:1024];  // word-addressable
+
+// PREADY: PENABLE & PSEL이 동시에 asserted일 때 즉시 응답 (0-wait state)
+assign PREADY = (PENABLE & PSEL) ? 1'b1 : 1'b0;
+
+// Store: SW 명령 시 PADDR[11:2]로 word index 접근
+always_ff @(posedge PCLK) begin
+    if (PSEL & PENABLE & PWRITE) begin
+        bmem[PADDR[11:2]] <= PWDATA;
+    end
+end
+```
+
+- **주소 매핑**: `PADDR[11:2]`로 word index에 접근 — 바이트 주소를 4-byte word 단위로 변환
+- **Wait state**: `PREADY = PENABLE & PSEL`로 0-wait state 즉시 응답 구현
+- **Read**: `PRDATA = bmem[PADDR[11:2]]` combinational 출력
+- **Memory map**: `0x1000_0000` ~ `0x1000_0FFF` (4 KB), PSEL0에 매핑
+
+---
+
+### 시뮬레이션 시나리오 선정 이유
+
+BRAM의 핵심 기능은 **CPU → APB Master → BRAM** 경로를 통한 읽기/쓰기 트랜잭션 정확성입니다. 이를 검증하기 위해 실제 C 펌웨어를 RISC-V GCC로 크로스 컴파일한 `.mem` 파일을 ROM에 탑재하여, CPU가 실제 명령어를 실행하면서 BRAM에 접근하는 **end-to-end 시나리오**를 구성하였습니다.
+
+| 시나리오 | 선정 이유 |
+|----------|-----------|
+| **0번지 `0x20000830` 읽기** | BRAM 초기값이 올바르게 적재되었는지 확인 (`sys_init()` 호출 시 가장 먼저 수행). LW 명령어 → APB READ 트랜잭션 전 경로 검증 |
+| **1번지에 `0x12345678` 저장** | SW 명령어 → APB WRITE 트랜잭션 → `bmem[1]` 반영 확인. 임의의 고정값을 사용하여 waveform에서 데이터 추적이 용이 |
+
+---
+
+### 검증 신호 및 확인 내용
+
+#### ① 0번지 읽기 — `bram_data0 = 0x20000830`
+
+C 코드의 `bram_data0 = *(__IO uint32_t *)APB_BRAM;`는 어셈블리 `lw a5, 0(a5)` (opcode `0007a783`)로 컴파일됩니다.
+
+**CPU**
+
+| 신호 | 확인 내용 |
+|------|-----------|
+| `instr_data[31:0]` | `0007a783` — LW 명령어 fetch 확인 |
+| `bus_rreq` | LW MEM 단계 진입 시 1클럭 pulse 발생 |
+| `bus_addr[31:0]` | `0x10000000` — BRAM 베이스 주소 |
+| `RD1[31:0]` (reg file) | `0x20000830` — 읽어온 값이 레지스터 `a5`(x15)에 저장 |
+
+**APB Master**
+
+| 신호 | 확인 내용 |
+|------|-----------|
+| `c_state` | `IDLE → SETUP → ACCESS → IDLE` 천이 확인 |
+| `PADDR[31:0]` | `0x10000000` |
+| `PWRITE` | `0` (READ) |
+| `PSEL0` | ACCESS 구간 동안 `1` |
+| `PENABLE` | ACCESS 구간 동안 `1` |
+| `PRDATA0[31:0]` | `0x20000830` — BRAM에서 읽어온 데이터 |
+| `PREADY0` | `1` (0-wait, 즉시 응답) |
+
+**BRAM**
+
+| 신호 | 확인 내용 |
+|------|-----------|
+| `bmem[0][31:0]` | `0x20000830` — 초기값 적재 확인 |
+| `PRDATA[31:0]` | `0x20000830` combinational 출력 |
+
+---
+
+#### ② 1번지 쓰기 — `*(APB_BRAM + 0x04U) = 0x12345678`
+
+C 코드의 쓰기 연산은 `sw a4, 0(a5)` (opcode `00e7a023`)로 컴파일됩니다.
+
+**CPU**
+
+| 신호 | 확인 내용 |
+|------|-----------|
+| `instr_data[31:0]` | `00e7a023` — SW 명령어 fetch 확인 |
+| `bus_wreq` | SW MEM 단계 진입 시 1클럭 pulse 발생 |
+| `bus_addr[31:0]` | `0x10000004` — BRAM 1번지 (베이스 + 4) |
+| `bus_wdata[31:0]` | `0x12345678` |
+
+**APB Master**
+
+| 신호 | 확인 내용 |
+|------|-----------|
+| `c_state` | `IDLE → SETUP → ACCESS → IDLE` 천이 확인 |
+| `PADDR[31:0]` | `0x10000004` |
+| `PWDATA[31:0]` | `0x12345678` |
+| `PWRITE` | `1` (WRITE) |
+| `PSEL0` | ACCESS 구간 동안 `1` |
+| `PENABLE` | ACCESS 구간 동안 `1` |
+| `WREQ` | SETUP 직전 `1` pulse |
+| `decode_en` | SETUP/ACCESS 구간 동안 `1` |
+| `PREADY0` | `1` (0-wait) |
+
+**BRAM**
+
+| 신호 | 확인 내용 |
+|------|-----------|
+| `bmem[1][31:0]` | `0x12345678` — PCLK 상승엣지에서 래치 확인 |
+| `PADDR[11:2]` | `0x1` — word index 1 |
+
+---
+
 ## 🧩 Peripheral 레지스터 맵
 
 ### GPIO (`0x2000_0000`)

@@ -119,6 +119,8 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY)──►
          PENABLE=0         PENABLE=0     PENABLE=1
 ```
 
+<img width="1102" height="1000" alt="Image" src="https://github.com/user-attachments/assets/a6a4c242-651e-48f6-a44f-446192948afe" />
+
 - **addr_decoder**: `PADDR[31:28]` 및 `PADDR[15:12]`로 PSEL0~PSEL3 자동 생성
 - **apb_mux**: PADDR 기준으로 해당 슬레이브의 PRDATA / PREADY를 CPU로 라우팅
 - Wait state 지원 — PREADY=0이면 ACCESS 상태 유지

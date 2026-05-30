@@ -30,7 +30,7 @@ Single-Cycle 대비 Multi-Cycle 전환 후 타이밍 위반(WNS −2.874 ns → 
 
 ## 🏗️ System Architecture
 
-<img width="1600" height="1081" alt="Image" src="https://github.com/user-attachments/assets/7f56c930-f64b-4de5-a915-889cb11a2254" />
+<img width="1200" alt="Image" src="https://github.com/user-attachments/assets/7f56c930-f64b-4de5-a915-889cb11a2254" />
 
 ---
 

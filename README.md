@@ -131,20 +131,6 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY)──►
 
 BRAM Slave는 APB 버스에 연결되는 **word-addressable 내부 RAM**으로, 1024 word(4 KB) 크기의 `logic [31:0] bmem[0:1024]` 배열로 구현하였습니다.
 
-```systemverilog
-logic [31:0] bmem[0:1024];  // word-addressable
-
-// PREADY: PENABLE & PSEL이 동시에 asserted일 때 즉시 응답 (0-wait state)
-assign PREADY = (PENABLE & PSEL) ? 1'b1 : 1'b0;
-
-// Store: SW 명령 시 PADDR[11:2]로 word index 접근
-always_ff @(posedge PCLK) begin
-    if (PSEL & PENABLE & PWRITE) begin
-        bmem[PADDR[11:2]] <= PWDATA;
-    end
-end
-```
-
 - **주소 매핑**: `PADDR[11:2]`로 word index에 접근 — 바이트 주소를 4-byte word 단위로 변환
 - **Wait state**: `PREADY = PENABLE & PSEL`로 0-wait state 즉시 응답 구현
 - **Read**: `PRDATA = bmem[PADDR[11:2]]` combinational 출력
@@ -154,7 +140,7 @@ end
 
 ### 시뮬레이션 시나리오 선정 이유
 
-BRAM의 핵심 기능은 **CPU → APB Master → BRAM** 경로를 통한 읽기/쓰기 트랜잭션 정확성입니다. 이를 검증하기 위해 실제 C 펌웨어를 RISC-V GCC로 크로스 컴파일한 `.mem` 파일을 ROM에 탑재하여, CPU가 실제 명령어를 실행하면서 BRAM에 접근하는 **end-to-end 시나리오**를 구성하였습니다.
+BRAM의 핵심 기능은 **CPU → APB Master → BRAM** 경로를 통한 읽기/쓰기 트랜잭션 정확성입니다. 이를 검증하기 위해 실제 C 펌웨어를 RISC-V 어셈블리로 변환한 .mem 파일을 ROM에 탑재하여, CPU가 실제 명령어를 실행하면서 BRAM에 접근하는 **end-to-end 시나리오**를 구성하였습니다.
 
 | 시나리오 | 선정 이유 |
 |----------|-----------|

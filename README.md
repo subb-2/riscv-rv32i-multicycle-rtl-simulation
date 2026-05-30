@@ -181,5 +181,3 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY=1)──�
 ├── uart_top.v                   # UART TX / RX / baud_tick_gen 통합 모듈
 │
 └── riscv_rv32i_rom_data.mem     # ROM 초기화 데이터 (hex, $readmemh 용)
-
----

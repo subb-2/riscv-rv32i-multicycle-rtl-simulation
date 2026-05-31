@@ -99,7 +99,7 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY=1)──�
 * **FND**: ODATA write → fnd_controller digit split → 7-segment 출력 검증
 * **UART**: `tx_n` 1~4회 반복, `baud_reg` 9600/19200/115200bps 전환, error 플래그 검증
 
-통합 FPGA 동작 시나리오는 다음 순서로 검증하였습니다.
+### 4. 통합 FPGA 동작 시나리오
 
 ```
 1. sys_init()        — RAM / GPIO / FND / UART 레지스터 초기화 및 검증

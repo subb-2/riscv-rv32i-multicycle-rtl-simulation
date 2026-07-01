@@ -123,11 +123,6 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY=1)──�
 * **문제**: WREQ/RREQ가 1클럭만 유지될 경우 SETUP 진입 후 PADDR가 0으로 돌아가는 현상.
 * **해결**: IDLE 상태 combinational 블록에서 `PADDR_next = Addr`로 미리 래치하여 SETUP/ACCESS 구간 동안 값 유지.
 
-### 3. GPIO/GPI/GPO 분리 → 통합
-
-* **문제**: GPO/GPI를 별도 슬레이브로 분리하면 방향 제어 불가 및 슬레이브 수 증가.
-* **해결**: CTL/ODATA/IDATA 레지스터를 가진 단일 `APB_GPIO` 슬레이브로 통합, `generate` 블록으로 핀별 tristate 버퍼 구현.
-
 ---
 
 ## 📚 배운 점

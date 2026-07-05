@@ -120,8 +120,10 @@ IDLE ──(WREQ | RREQ)──► SETUP ──► ACCESS ──(PREADY=1)──�
 
 ### 2. APB Master IDLE에서 PADDR/PWDATA 소실
 
-* **문제**: WREQ/RREQ가 1클럭만 유지될 경우 SETUP 진입 후 PADDR가 0으로 돌아가는 현상.
-* **해결**: IDLE 상태 combinational 블록에서 `PADDR_next = Addr`로 미리 래치하여 SETUP/ACCESS 구간 동안 값 유지.
+* **문제**: WREQ/RREQ가 1클럭만 유지될 때 SETUP 진입 후 주소값이 0으로 사라짐.
+* **원인**: IDLE 상태에서 PADDR를 조합논리로만 출력하다 요청 신호가 내려가면서 주소도 같이 사라진 것이 원인.
+* **해결**: PADDR_next = Addr로 미리 래치해 SETUP/ACCESS 동안 값이 유지되도록 수정.
+* **결과**: SETUP 진입 후에도 주소값 정상 유지 확인.
 
 ---
 
